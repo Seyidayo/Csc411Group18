@@ -13,7 +13,6 @@ var CartSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
-
   price: {
       type: Number,
       default: 0

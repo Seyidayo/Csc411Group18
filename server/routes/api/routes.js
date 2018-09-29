@@ -30,13 +30,35 @@ module.exports = (app) => {
   });
 
   app.post('/api/account/cartpay', (req, res, next) => {
-      Model.Cart.find({}, function(err, Current){
-        if(err) { throw err }
-        
-        for(var i = 0; i < Current.length; i++){
-            console.log(i+" "+Current)
+    Model.Cart.find({}, function (err, Current) {
+      if (err) {
+        throw err
+      }
+      if (Current) {
+
+        for (i = 0; i < Current.length; i++) {
+
+          Request.username = Current[i].username;
+          Request.device = Current[i].device;
+          Request.problem = Current[i].problem;
+          Request.stage = "Received Request";
+
+          Request.save((err, yep) => {
+            if (err) {
+              throw err
+            }
+            return res.send({
+              success: true,
+              message: "Successful"
+            })
+          })
         }
-      })
+      }
+
+
+    })
+
+
   })
 
   app.post('/api/account/cartpush', (req, res, next) => {
@@ -64,6 +86,7 @@ module.exports = (app) => {
     }
 
     // console.log(problem + " " + price + " " + name + " " + email)
+
     const Request = new Model.Cart();
     Request.username = email;
     Request.device = name;
