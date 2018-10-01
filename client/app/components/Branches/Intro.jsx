@@ -22,5 +22,4 @@ class LandingPage extends Component {
         )
     }
 }
-// style="color:black; font-size: 30px; font-weight: bold"
 export default LandingPage;

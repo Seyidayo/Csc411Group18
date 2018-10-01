@@ -30,15 +30,17 @@ module.exports = (app) => {
   });
 
   app.post('/api/account/cartpay', (req, res, next) => {
+    var username = req.body.user
     Model.Cart.find({}, function (err, Current) {
       if (err) {
         throw err
       }
       if (Current) {
+        Request = new Model.Repair();
 
         for (i = 0; i < Current.length; i++) {
 
-          Request.username = Current[i].username;
+          Request.username = username;
           Request.device = Current[i].device;
           Request.problem = Current[i].problem;
           Request.stage = "Received Request";
@@ -154,11 +156,31 @@ module.exports = (app) => {
 
         const currentUser = user[0];
 
-        return res.send({
-          success: true,
-          message: 'Found the user',
-          email: currentUser.email,
+        Model.Repair.find({
+          username: currentUser.email
+        }, function (err, userRepairs) {
+          if (err) return res.send({
+            success: false,
+            message: 'Error: invalid'
+          });
+          if (!userRepairs) {
+            return res.send({
+              success: true,
+              message: 'Found the user, no repairs',
+              email: currentUser.email,
+              repairs: "Empty"
+            })
+          } else {
+            return res.send({
+              success: true,
+              message: 'Found the user, with repairs',
+              email: currentUser.email,
+              repairs: userRepairs
+            })
+          }
         })
+
+
       })
     })
   })

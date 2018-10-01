@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class DeviceList extends Component {
+class  DeviceList extends Component {
 
     constructor(props) {
         super(props);
@@ -508,7 +508,7 @@ class DeviceList extends Component {
                                                         <input type="text" className="modal-input" value={otherLaptopName} onChange={this.onOtherLaptopNameChange} />
 
                                                         <p>Device Problem:</p>
-                                                        <select onChange={this.onOtherLaptopProblem}>
+                                                        <select onChange={this.onOtherLaptopProblemChange   }>
                                                             <option value="none">None</option>
                                                             <option value="Charging-port">Charging Port</option>
                                                             <option value="Hard-drive">Hard Drive</option>

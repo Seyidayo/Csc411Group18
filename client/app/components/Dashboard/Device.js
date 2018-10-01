@@ -4,8 +4,10 @@ import { Link, Switch, Route } from 'react-router-dom';
 import { deleteFromStorage } from '../../utils/storage'
 
 import NavbarDevice from '../NavigationComponent/NavbarDevice.jsx'
-import DeviceList from '../Dashboard/DeviceList.jsx'
-import { CartDetails } from './cart'
+
+import DeviceList from '../Branches/DeviceList.jsx'
+import { CartDetails, RepairDetails } from '../Branches/cart'
+import TrackRepair from '../Branches/TrackRepair.jsx'
 
 class Devices extends Component {
 
@@ -17,7 +19,9 @@ class Devices extends Component {
       email: '',
       cardPin: '',
       cardError: '',
-      cartItems: []
+      cartItems: [],
+
+      repairs: []
     }
 
     this.onLogOutClick = this.onLogOutClick.bind(this);
@@ -30,7 +34,7 @@ class Devices extends Component {
   }
 
   componentDidMount() {
-    const { token, email } = this.state;
+    const { token, email, repairs } = this.state;
 
     fetch('/api/account/details', {
       method: 'POST',
@@ -47,6 +51,7 @@ class Devices extends Component {
           this.setState({
             email: json.email,
             message: json.message,
+            repairs: json.repairs
           });
         }
       });
@@ -92,7 +97,7 @@ class Devices extends Component {
   }
 
   onPayClick() {
-      const { cartItems, cardPin, cardError } = this.state;
+      const { cartItems, cardPin, cardError, email } = this.state;
 
       if(cardPin !== "GROUP-18-PIN"){
           this.setState({
@@ -100,19 +105,22 @@ class Devices extends Component {
           })
       }
 
-      fetch('/api/account/cartPay', {
+      fetch('/api/account/cartpay', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          repair: cartItems
+          repair: cartItems,
+          user: email
         })
       })
       .then(res => res.json())
       .then(json => {
         if (json.success) {
           console.log("Paid For")
+          fetch('/api/account/cartdelete')
+          window.location.reload();
         }
       });
       
@@ -141,6 +149,7 @@ class Devices extends Component {
       cardPin,
       cardError,
       cartItems,
+      repairs
     } = this.state;
 
     return (
@@ -180,7 +189,7 @@ class Devices extends Component {
 
                         {/* <!-- Modal footer --> */}
                         <div className="modal-footer text-center">
-                            <button type="button" className="btn btn-success" data-toggle="modal" data-dismiss="#cartModal" data-target = "#pay">Pay</button>
+                            <button type="button" className="btn btn-success" data-toggle="modal" data-target="#pay">Pay</button>
                             <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={this.onCartDeleteClick}>Delete Cart</button>
                         </div>
                     </div>
@@ -217,7 +226,17 @@ class Devices extends Component {
 
         <DeviceList user={email} />
 
-        {/* <TrackRepair user={email} /> */}
+        <div className="section light-bg" id="select_device">
+            <div className="container">
+                <div className="section-title">
+                    <h3>Track Your Repairs</h3>
+                    <p>{email}</p>
+                </div>
+                <div className="container">
+                    <RepairDetails CartProps={repairs} />
+                </div>
+            </div>
+        </div>
       </div>
     )
   }

@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom';
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { getFromStorage, setInStorage } from '../../utils/storage'
 
-import LandingPage from './Intro.jsx'
-import InfoPage from './Info.jsx'
+import LandingPage from '../Branches/Intro.jsx'
+import InfoPage from '../Branches/Info.jsx'
 import Footer from '../FooterComponent/footer.jsx'
 
 import Device from './Device'
@@ -181,7 +181,7 @@ class Home extends Component {
     else {
 
       // alert(signUpEmail+" "+signUpAddress+" "+ signUpPassword)
-      fetch('/api/account/register', {
+      fetch('/api/account/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

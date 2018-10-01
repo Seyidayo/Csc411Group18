@@ -35,7 +35,7 @@ export const RepairDetails = ({CartProps}) => {
                     <tr>
                         <th>Device Name</th>
                         <th>Problem</th>
-                        <th>Price</th>
+                        <th>Stage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,7 +44,7 @@ export const RepairDetails = ({CartProps}) => {
                             <tr key={index}>
                                 <td>{cartdets.device}</td>
                                 <td>{cartdets.problem}</td>
-                                <td>{cartdets.price}</td>
+                                <td>{cartdets.stage}</td>
                             </tr>
                         )
                     }
