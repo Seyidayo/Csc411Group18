@@ -236,8 +236,6 @@ class Home extends Component {
                           <li className="nav-item"> <a className="nav-link active" href="#home">HOME <span className="sr-only">(current)</span></a> </li>
                           <li className="nav-item"> <a className="nav-link" href="#HIW">HOW IT WORKS</a> </li>
                           <li className="nav-item"> <a className="nav-link" href="#contact">CONTACT US</a> </li>
-                          <li><p>{signUpError}</p></li>
-
                         </ul>
                         <a href="#" data-target="#login_page" data-toggle="modal"> <button className="btn btn-primary btn-login" >LOGIN</button></a>
                         <button data-toggle="modal" data-target="#signup_page" className="btn btn-dark ">SIGN UP</button>
@@ -294,7 +292,7 @@ class Home extends Component {
                   {/* <!-- Modal body --> */}
                   <div className="modal-body">
                     <div className="login_section">
-                      <p>{signInError}</p>
+                      alert({signInError})
                       {/* <a className="navbar-brand" href="index.html">13 DOT</a> */}
                       <input type="text" className="form-control" placeholder="Email/Username" value={signInEmail} onChange={this.onSignInEmailChange} required />
                       <input type="password" className="form-control" placeholder="Password" value={signInPassword} onChange={this.onSignInPasswordChange} required />
