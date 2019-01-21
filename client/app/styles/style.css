@@ -53,12 +53,13 @@ p {
   transition: all 0.3s ease;
 }
 
-.btn-primary {
+.btn-primary, .btn-dark, .btn-danger, .btn-success {
   border-radius: 3px;
   box-shadow: 0px 9px 32px 0px rgba(0, 0, 0, 0.2);
   font-weight: 500;
   padding: 0.6rem 2rem;
   border: 0;
+  margin-right: 5px;
 }
 
 .btn-primary:hover,
@@ -586,6 +587,64 @@ header {
 .btn-light img {
   margin-right: 0.4rem;
   vertical-align: text-bottom;
+}
+
+/* PROGRESS BAR */
+
+
+.progress_bar {
+    counter-reset: step;
+}
+
+.progress_bar li {
+    list-style-type: none;
+    float: left;
+    width: 25%;
+    font-weight: bolder;
+    position: relative;
+    font-size: 13px;
+    text-align: center;
+}
+
+.progress_bar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 30px;
+    line-height: 30px;
+    border: 3px solid #ddd;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.progress_bar li:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background-color: #ddd;
+    top: 17px;
+    left: -50%;
+    z-index: -1;
+}
+
+.progress_bar li:first-child:after {
+    content: none;
+}
+
+.progress_bar li.active {
+    color: #007bff;
+}
+
+.progress_bar li.active:before {
+    background-color: #007bff;
+    color: white;
+}
+
+.progress_bar li.active+li:after {
+    background-color: #007bff;
 }
 
 

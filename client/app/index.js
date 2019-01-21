@@ -16,6 +16,7 @@ import App from './components/App/App';
 import NotFound from './components/App/NotFound';
 import Home from './components/Dashboard/Home';
 import Devices from './components/Dashboard/Device'
+import UpdateStage from './components/Dashboard/UpdateStage'
 
 import './styles/bootstrap.min.css';
 import './styles/owl.carousel.min.css';
@@ -27,6 +28,7 @@ render((
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route exact path="/device" component={Devices} />
+          <Route exact path="/update/:value" component={UpdateStage} />
           <Route component={NotFound}/>
         </Switch>
       </App>

@@ -9,6 +9,10 @@ const UserSessionSchema = new mongoose.Schema({
     type: Date,
     default: Date.now()
   },
+  status: {
+    type: String,
+    default: ''
+  },
   isDeleted: {
     type: Boolean,
     default: false

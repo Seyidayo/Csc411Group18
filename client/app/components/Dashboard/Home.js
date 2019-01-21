@@ -10,6 +10,7 @@ import InfoPage from '../Branches/Info.jsx'
 import Footer from '../FooterComponent/footer.jsx'
 
 import Device from './Device'
+import Admin from './Admin'
 
 
 class Home extends Component {
@@ -18,6 +19,7 @@ class Home extends Component {
     super(props);
     this.state = {
       token: '',
+      status: '',
 
       signInEmail: '',
       signInPassword: '',
@@ -61,10 +63,12 @@ class Home extends Component {
           if (json.success) {
             this.setState({
               token: json._id,
+              status: json.status
             });
           } else {
             this.setState({
               token: '',
+              status: ''
             })
           }
         });
@@ -72,6 +76,7 @@ class Home extends Component {
     else {
       this.setState({
         token: '',
+        status: ''
       })
     }
   }
@@ -101,6 +106,7 @@ class Home extends Component {
             this.setState({
               signInError: json.message,
               token: json.token,
+              status: json.status,
             });
             window.location.reload();
           }
@@ -206,6 +212,7 @@ class Home extends Component {
 	render() {
     const{
       token,
+      status,
 
       signInEmail,
       signInPassword,
@@ -258,7 +265,7 @@ class Home extends Component {
                   {/* <!-- Modal body --> */}
                   <div className="modal-body">
                     <div className="login_section">
-                      <p>{signUpError}</p>
+                      <p className="text-center">{signUpError}</p>
                       {/* <a className="navbar-brand" href="index.html">13 DOT</a> */}
                       <input type="text" className="form-control" placeholder="Email/Username" value={signUpEmail} onChange={this.onSignUpEmailChange} required />
                       <input type="password" className="form-control" placeholder="Password" value={signUpPassword} onChange={this.onSignUpPasswordChange} required />
@@ -292,7 +299,7 @@ class Home extends Component {
                   {/* <!-- Modal body --> */}
                   <div className="modal-body">
                     <div className="login_section">
-                      alert({signInError})
+                      {signInError}
                       {/* <a className="navbar-brand" href="index.html">13 DOT</a> */}
                       <input type="text" className="form-control" placeholder="Email/Username" value={signInEmail} onChange={this.onSignInEmailChange} required />
                       <input type="password" className="form-control" placeholder="Password" value={signInPassword} onChange={this.onSignInPasswordChange} required />
@@ -322,10 +329,17 @@ class Home extends Component {
       )
     }
 
-    else if(token) {
-      return(
-        <Device userDetails={token} />
-      )
+    if(token) {
+      if(status === "admin") {
+          return(
+              <Admin userDetails={token} />
+          )
+      }
+    else {
+        return(
+            <Device userDetails={token} />
+          )
+    }
     }
   }
 }

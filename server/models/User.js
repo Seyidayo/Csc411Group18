@@ -16,6 +16,11 @@ var UserSchema = new mongoose.Schema({
     default: '' 
   },
 
+  status: {
+    type: String,
+    default: 'client'
+  },
+
   isDeleted: { 
     type: Boolean,
     default: false 

@@ -29,6 +29,20 @@ module.exports = (app) => {
     })
   });
 
+  app.get('/api/account/alldetails', (req, res, next) => {
+    Model.Repair.find({}, function (err, details) {
+      if (err) {
+        throw err;
+      }
+
+      return res.send({
+        success: true,
+        message: 'All Details Loaded',
+        allRepairs: details
+      })
+    })
+  })
+
   app.post('/api/account/cartpay', (req, res, next) => {
     var username = req.body.user
     Model.Cart.find({}, function (err, Current) {
@@ -175,7 +189,8 @@ module.exports = (app) => {
               success: true,
               message: 'Found the user, with repairs',
               email: currentUser.email,
-              repairs: userRepairs
+              repairs: userRepairs,
+              status: currentUser.status
             })
           }
         })
@@ -183,6 +198,58 @@ module.exports = (app) => {
 
       })
     })
+  })
+
+  app.post('/api/account/delete', (req, res, next) => {
+      var id = req.body._id;
+
+      Model.Repair.findOneAndRemove({
+        _id: id
+      }, function (err, user) {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Not Found"
+          })
+        }
+  
+        return res.send({
+            success: true,
+            message: "Record Deleted"
+        })
+  })
+})
+
+  app.post('/api/account/profile', (req, res, next) => {
+      var id = req.body._id;
+
+      Model.Repair.find({_id: id}, function(err, track){
+        if(err) {
+            res.send({
+                message: 'Error: Server Error',
+                success: false
+            })
+        }
+        const Track = track[0]
+
+        Model.User.find({email: Track.username}, function(err, user) {
+            if(err) {
+                res.send({
+                    message: 'Error: Server Error',
+                    success: false
+                })
+            }
+
+            const User = user[0]
+
+            res.send({
+                success: true,
+                message: 'Order Found 00',
+                userAddress: User.address,
+                userModel: Track
+            })
+        })
+      })
   })
 
   app.post('/api/account/signin', (req, res, next) => {
@@ -235,23 +302,29 @@ module.exports = (app) => {
     //Get the Id
     var id = req.body.id
 
-    Model.UserSession.findByIdAndRemove({
-      _id: id,
-      isDeleted: false
-    }, (err, sessions) => {
+    Model.Cart.remove(function (err, delOk) {
       if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: Server Error'
-        });
+        throw err
       } else {
-        return res.send({
-          success: true,
-          message: 'Good'
-        });
+        Model.UserSession.findByIdAndRemove({
+          _id: id,
+          isDeleted: false
+        }, (err, sessions) => {
+          if (err) {
+            return res.send({
+              success: false,
+              message: 'Error: Server Error'
+            });
+          } else {
+            return res.send({
+              success: true,
+              message: 'Good'
+            });
+          }
+        })
       }
     })
-  });
+  })
 
   app.post('/api/account/signup', (req, res, next) => {
 
@@ -292,6 +365,33 @@ module.exports = (app) => {
     })
   });
 
+  app.post('/api/account/updatestat', (req, res, next) => {
+      var stat = req.body.stat,
+        id = req.body._id;
+
+      Model.Repair.findOneAndUpdate({
+          _id: id
+      }, {
+          $set: {
+              stage: stat 
+          }
+      }, function (err, response) {
+        if (err) {
+          return res.send({
+            success: false,
+            message: "Error: Server Error"
+          })
+        }
+  
+        return res.send({
+          success: true,
+          message: "Status Change Successful"
+        })
+
+        res.redirect('/')
+      })
+  })
+
   app.post('/api/account/verify', (req, res, next) => {
 
     var token = req.body.token
@@ -316,7 +416,8 @@ module.exports = (app) => {
       return res.send({
         success: true,
         message: 'Good',
-        _id: session._id
+        _id: session._id,
+        status: session.status,
       });
     })
   });

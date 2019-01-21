@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "...",
   "author": "Idowu Faith",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Seyidayo/Csc411group18.git"
-  },
   "license": "MIT",
   "private": true,
   "scripts": {
